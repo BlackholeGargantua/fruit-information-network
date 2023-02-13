@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+# 对 git 命令执行前进行一些操作
+# 
+. "$(dirname -- "$0")/_/husky.sh"
+
+npm run lint
