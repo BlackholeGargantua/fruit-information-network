@@ -1,16 +1,28 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+
+// 引入main-nav路由导航内容
+import mainContent from './home/main-content'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    redirect: '/home'
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/home',
+    name: 'home',
+    component: () => import('@/views/home/HomeView.vue'),
+    children: mainContent
+  },
+  {
+    path: '/infoDetail',
+    name: 'infoDetail',
+    component: () => import('@/views/info/InfoDetailView.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import('@/views/not-found/not-found.vue')
   }
 ]
 
