@@ -8,7 +8,7 @@
       text-color="#fff"
       :router="true"
     >
-      <el-menu-item index="/">
+      <el-menu-item index="/home">
         <el-icon><setting /></el-icon>
         <span>全部</span>
       </el-menu-item>
