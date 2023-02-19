@@ -15,9 +15,9 @@ const routes: Array<RouteRecordRaw> = [
     children: mainContent
   },
   {
-    path: '/infoDetail',
-    name: 'infoDetail',
-    component: () => import('@/views/info/InfoDetailView.vue')
+    path: '/info',
+    name: 'info',
+    component: () => import('@/views/info/InfoView.vue')
   },
   {
     path: '/:pathMatch(.*)*',

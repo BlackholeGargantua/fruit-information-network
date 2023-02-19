@@ -9,14 +9,14 @@
       text-color="#fff"
       active-text-color="#40a070"
     >
-      <button class="nav-head-img" @click="router.push('/')" />
-      <el-menu-item index="1" @click="router.push('/')">首页</el-menu-item>
-      <el-menu-item index="2">
+      <button class="nav-head-img" />
+      <el-menu-item index="1" @click="router.push('/home')">首页</el-menu-item>
+      <el-menu-item>
         <related-info></related-info>
       </el-menu-item>
       <div class="flex-grow" />
-      <nav-search></nav-search>
-      <el-menu-item index="4">登录</el-menu-item>
+      <nav-search v-show="router.currentRoute.value.path !== '/info'"></nav-search>
+      <el-menu-item index="4" style="padding-right: 30px">登录</el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -53,10 +53,11 @@ export default defineComponent({
 <style scoped lang="less">
 .home-nav-bar {
   position: sticky; // 相比fixed不会脱离文档流
-  left: 0;
   top: 0;
-  right: 0;
-  z-index: 999;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  // margin-right: calc(100% - 100vw);
   .el-menu {
     height: 60px;
     display: flex;

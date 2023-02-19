@@ -1,7 +1,7 @@
 <template>
   <div class="main-content" :class="{ 'enable-waterfall-layout': props.showLayout }">
     <template v-for="item in 14" :key="item">
-      <el-card :body-style="{ padding: '5px' }">
+      <el-card :body-style="{ padding: '5px' }" @click.prevent="goToInfo()">
         <img
           src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
           class="image"
@@ -20,6 +20,7 @@
 
 <script lang="ts" setup>
 import { defineProps, withDefaults } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElButton, ElCard } from 'element-plus'
 
 const props = withDefaults(
@@ -28,12 +29,20 @@ const props = withDefaults(
   }>(),
   { showLayout: false }
 )
+const router = useRouter()
+const goToInfo = () => {
+  router.push('/info')
+}
 </script>
 
 <style lang="less" scoped>
 .enable-waterfall-layout {
   column-count: 4;
   column-gap: 15px;
+  .el-card {
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
 }
 /* 当窗口小于1400px时只展示3列 */
 @media (max-width: 1400px) {

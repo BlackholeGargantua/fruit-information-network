@@ -56,10 +56,10 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .main-nav {
-  /* height: 500px; */
-  min-width: 290px;
+  background-color: #5d3d21;
+  margin-bottom: 15px;
   opacity: 0.8;
   flex: 100;
 }
