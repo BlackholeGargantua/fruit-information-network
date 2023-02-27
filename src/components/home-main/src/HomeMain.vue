@@ -6,12 +6,13 @@
     </div>
     <router-view></router-view>
   </div>
-  <el-pagination :background="true" layout="prev, pager, next" :total="100" />
+  <el-pagination :background="true" layout="prev, pager, next" :total="100" :page-size="10" />
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from '@/store'
 import MainNav from '../main-nav'
 import MainSwiper from '../main-swiper'
 import MainContent from '../main-content'
@@ -26,6 +27,13 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter()
+    const store = useStore()
+
+    // onMounted(() => {
+    //   console.log(store.state.fruitInfo)
+    // })
+
+    // const fruitInfo = computed(() => store.state.fruitInfo.records)
 
     // 是否展示swiper
     const showSwiper = computed(() => {

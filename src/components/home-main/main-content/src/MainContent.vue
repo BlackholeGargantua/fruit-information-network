@@ -1,17 +1,10 @@
 <template>
   <div class="main-content" :class="{ 'enable-waterfall-layout': props.showLayout }">
-    <template v-for="item in 14" :key="item">
+    <template v-for="fruit in fruitInfo" :key="fruit.id">
       <el-card :body-style="{ padding: '5px' }" @click.prevent="goToInfo()">
-        <img
-          src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-          class="image"
-        />
+        <img :src="fruit.img_url" class="image" />
         <div style="padding: 14px">
-          <span>Yummy hamburger</span>
-          <div class="bottom">
-            <p>{{ item }}</p>
-            <el-button text class="button">Operating</el-button>
-          </div>
+          <span>{{ fruit.scientific_name }}</span>
         </div>
       </el-card>
     </template>
@@ -19,9 +12,10 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, withDefaults } from 'vue'
+import { defineProps, withDefaults, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElButton, ElCard } from 'element-plus'
+import { useStore } from '@/store'
+import { ElCard } from 'element-plus'
 
 const props = withDefaults(
   defineProps<{
@@ -30,9 +24,13 @@ const props = withDefaults(
   { showLayout: false }
 )
 const router = useRouter()
+const store = useStore()
+
+// 点击卡片后跳转到对应的信息界面
 const goToInfo = () => {
   router.push('/info')
 }
+const fruitInfo = computed(() => store.state.fruitInfo.records)
 </script>
 
 <style lang="less" scoped>

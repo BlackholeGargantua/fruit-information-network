@@ -8,39 +8,28 @@
       text-color="#fff"
       :router="true"
     >
-      <el-menu-item index="/home">
-        <el-icon><setting /></el-icon>
-        <span>全部</span>
-      </el-menu-item>
-      <el-menu-item index="/home/berries-content">
-        <el-icon><setting /></el-icon>
-        <span>浆果类</span>
-      </el-menu-item>
-      <el-menu-item index="/home/melonsFruits-content">
-        <el-icon><setting /></el-icon>
-        <span>瓜果类</span>
-      </el-menu-item>
-      <el-menu-item index="/home/citrus-content">
-        <el-icon><setting /></el-icon>
-        <span>柑橘类</span>
-      </el-menu-item>
-      <el-menu-item index="/home/nutFrupes-content">
-        <el-icon><setting /></el-icon>
-        <span>坚果核果类</span>
-      </el-menu-item>
-      <el-menu-item index="/home/tropicalFruits-content">
-        <el-icon><setting /></el-icon>
-        <span>热带水果类</span>
-      </el-menu-item>
+      <template v-for="(item, id) in nav" :key="id">
+        <el-menu-item
+          :index="item.route"
+          :route="{ path: item.route, query: { fruitType: item.title } }"
+        >
+          <el-icon><setting /></el-icon>
+          <span>{{ item.title }}</span>
+        </el-menu-item>
+      </template>
     </el-menu>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMenu, ElMenuItem, ElIcon } from 'element-plus'
 import { Setting } from '@element-plus/icons-vue'
+
+import useStore from '@/store'
+
+import { INavType } from './type'
 
 export default defineComponent({
   components: {
@@ -51,7 +40,56 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter()
-    return { router }
+
+    // 导航条内容
+    const nav = reactive<INavType[]>([
+      {
+        id: 1,
+        title: '全部',
+        route: '/home/'
+      },
+      {
+        id: 2,
+        title: '浆果类',
+        route: '/home/berries-content'
+      },
+      {
+        id: 3,
+        title: '瓜果类',
+        route: '/home/melonsFruits-content'
+      },
+      {
+        id: 4,
+        title: '橘果类',
+        route: '/home/citrus-content'
+      },
+      {
+        id: 5,
+        title: '核果类',
+        route: '/home/nutFrupes-content'
+      },
+      {
+        id: 6,
+        title: '仁果类',
+        route: '/home/tropicalFruits-content'
+      }
+    ])
+
+    // 监听store 数据变化（切换导航条）
+    watch(
+      // 监听路由参数 fruitType 的值
+      () => router.currentRoute.value.query,
+      (newTypeValue) => {
+        // 路由参数 == '全部' 或没有参数(空对象)
+        if (newTypeValue?.fruitType === '全部' || JSON.stringify(newTypeValue) == '{}')
+          useStore.dispatch('getFruitInfo')
+        else useStore.dispatch('getFruitTypeInfo', newTypeValue)
+      },
+      // 默认执行一次，刷新也会执行请求数据
+      { immediate: true }
+    )
+
+    return { router, nav }
   }
 })
 </script>
