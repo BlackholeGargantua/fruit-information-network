@@ -10,36 +10,20 @@ const store = createStore<IRootState>({
   state: { fruitInfo: {} },
   getters: {},
   mutations: {
-    changeFruitInfo(state, data) {
-      state.fruitInfo = data
+    changeFruitInfo(state, payload) {
+      state.fruitInfo = payload
     }
   },
   actions: {
-    // 获取水果信息，默认查询 1页10条
-    async getFruitInfo({ commit }, payload: IRequestQueryType = { pageNumber: 1, pageSize: 20 }) {
-      await axios
-        .get('/fruitInfo/findAll', {
-          params: {
-            pageNumber: payload.pageNumber,
-            pageSize: payload.pageSize
-          }
-        })
-        .then((res) => {
-          const { data } = res.data
-          commit('changeFruitInfo', data)
-        })
-    },
-    // 获取水果分类信息
-    async getFruitTypeInfo(
+    // 获取水果分类或全部信息，默认查询 1页10条
+    async getFruitAllTypeInfo(
       { commit },
       payload: IRequestQueryType = { pageNumber: 1, pageSize: 20 }
     ) {
       await axios
-        .get('/fruitInfo/findTypePage', {
+        .get('/fruitInfo/findAllType', {
           params: {
-            pageNumber: payload.pageNumber,
-            pageSize: payload.pageSize,
-            fruitType: payload.fruitType
+            ...payload
           }
         })
         .then((res) => {

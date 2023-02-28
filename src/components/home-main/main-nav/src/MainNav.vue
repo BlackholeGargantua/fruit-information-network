@@ -82,8 +82,9 @@ export default defineComponent({
       (newTypeValue) => {
         // 路由参数 == '全部' 或没有参数(空对象)
         if (newTypeValue?.fruitType === '全部' || JSON.stringify(newTypeValue) == '{}')
-          useStore.dispatch('getFruitInfo')
-        else useStore.dispatch('getFruitTypeInfo', newTypeValue)
+          useStore.dispatch('getFruitAllTypeInfo')
+        else
+          useStore.dispatch('getFruitAllTypeInfo', { pageNumber: 1, pageSize: 20, ...newTypeValue })
       },
       // 默认执行一次，刷新也会执行请求数据
       { immediate: true }
@@ -100,5 +101,9 @@ export default defineComponent({
   margin-bottom: 15px;
   opacity: 0.8;
   flex: 100;
+  .el-menu {
+    // 去掉自带的右侧边框
+    border: 0;
+  }
 }
 </style>

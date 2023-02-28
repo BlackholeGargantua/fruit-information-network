@@ -6,11 +6,19 @@
     </div>
     <router-view></router-view>
   </div>
-  <el-pagination :background="true" layout="prev, pager, next" :total="100" :page-size="10" />
+  <el-pagination
+    :background="true"
+    layout="prev, pager, next"
+    @current-change="handleCurrentChange"
+    :current-page="fruitInfo.current"
+    :page-count="Math.floor((fruitInfo.total + fruitInfo.size - 1) / fruitInfo.size)"
+    :total="fruitInfo.total"
+    :page-size="fruitInfo.size"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '@/store'
 import MainNav from '../main-nav'
@@ -29,11 +37,25 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore()
 
-    // onMounted(() => {
-    //   console.log(store.state.fruitInfo)
-    // })
+    const fruitInfo = computed(() => store.state.fruitInfo)
 
-    // const fruitInfo = computed(() => store.state.fruitInfo.records)
+    // 修改分页组件页数
+    const handleCurrentChange = (currentPage: number) => {
+      if (
+        router.currentRoute.value.query.fruitType === '全部' ||
+        JSON.stringify(router.currentRoute.value.query) == '{}'
+      )
+        store.dispatch('getFruitAllTypeInfo', {
+          pageNumber: currentPage,
+          pageSize: 20
+        })
+      else
+        store.dispatch('getFruitAllTypeInfo', {
+          pageNumber: currentPage,
+          pageSize: 20,
+          ...router.currentRoute.value.query
+        })
+    }
 
     // 是否展示swiper
     const showSwiper = computed(() => {
@@ -47,7 +69,9 @@ export default defineComponent({
     })
 
     return {
-      showSwiper
+      fruitInfo,
+      showSwiper,
+      handleCurrentChange
     }
   }
 })

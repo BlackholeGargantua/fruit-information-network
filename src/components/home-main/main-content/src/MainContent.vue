@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, withDefaults, computed, watch, onMounted } from 'vue'
+import { defineProps, withDefaults, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '@/store'
 import { ElCard } from 'element-plus'
