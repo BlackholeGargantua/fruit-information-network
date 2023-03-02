@@ -32,6 +32,8 @@ type fruitInfoType = {
   planting_method?: string
   // 注意事项
   matters_needing_attention?: string
+  // 图片
+  img_url?: string
 }
 
 export { fruitInfoType }

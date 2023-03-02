@@ -1,4 +1,4 @@
-export interface IFruitState {
+export interface IFruitDetail {
   id?: number
   scientific_name?: string
   type?: string
@@ -17,4 +17,7 @@ export interface IFruitState {
   planting_method?: string
   matters_needing_attention?: string
   img_url?: string
+}
+export default interface IFruitState {
+  fruitDetail: IFruitDetail
 }

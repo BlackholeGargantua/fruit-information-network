@@ -32,7 +32,7 @@ const store = createStore<IRootState>({
         })
     }
   },
-  modules: { login, user, fruit }
+  modules: { fruit, login, user }
 })
 
 // 自定义一个Store，为了更好兼容ts类型（类型有提示）

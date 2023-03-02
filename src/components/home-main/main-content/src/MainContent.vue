@@ -1,7 +1,7 @@
 <template>
   <div class="main-content" :class="{ 'enable-waterfall-layout': props.showLayout }">
     <template v-for="fruit in fruitInfo" :key="fruit.id">
-      <el-card :body-style="{ padding: '5px' }" @click.prevent="goToInfo()">
+      <el-card :body-style="{ padding: '5px' }" @click.prevent="goToInfo(fruit.scientific_name)">
         <img :src="fruit.img_url" class="image" />
         <div style="padding: 14px">
           <span>{{ fruit.scientific_name }}</span>
@@ -27,8 +27,13 @@ const router = useRouter()
 const store = useStore()
 
 // 点击卡片后跳转到对应的信息界面
-const goToInfo = () => {
-  router.push('/info')
+const goToInfo = (fruitName: any) => {
+  router.push({
+    path: '/info',
+    query: {
+      fruitName: fruitName
+    }
+  })
 }
 const fruitInfo = computed(() => store.state.fruitInfo.records)
 </script>
