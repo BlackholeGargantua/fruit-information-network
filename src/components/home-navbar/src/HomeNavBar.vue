@@ -16,35 +16,74 @@
       </el-menu-item>
       <div class="flex-grow" />
       <nav-search v-show="router.currentRoute.value.path !== '/info'"></nav-search>
-      <el-menu-item index="4" style="padding-right: 30px">登录</el-menu-item>
+      <el-menu-item index="showLogin" style="padding-right: 30px" @click="showLoginPage">
+        <div
+          v-if="!!isShowUserPersonalOrLogin"
+          style="display: flex; flex-direction: row; justify-content: center; gap: 10px"
+        >
+          <div class="demo-type">
+            <el-avatar :size="40" :src="store.state.login.userPersonalInfo.avatar_url"> </el-avatar>
+          </div>
+          <span>{{ store.state.login.userPersonalInfo.username }}</span>
+        </div>
+        <p v-else>登录</p>
+      </el-menu-item>
+      <nav-login v-if="store.state.login.showLoginPage">
+        <template #loginRegister-userPersonalInfo>
+          <user-personal v-if="!!isShowUserPersonalOrLogin"></user-personal>
+          <login-register v-else></login-register>
+        </template>
+      </nav-login>
     </el-menu>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMenu, ElMenuItem } from 'element-plus'
+import { useStore } from '@/store'
+import { ElAvatar, ElMenu, ElMenuItem } from 'element-plus'
 import NavSearch from '@/components/home-navbar/nav-search/NavSearch.vue'
 import RelatedInfo from '@/components/home-navbar/related-info/RelatedInfo.vue'
-
+import NavLogin from '../nav-login/NavLogin.vue'
+import LoginRegister from '@/components/login-register'
+import UserPersonal from '@/components/user-personal-info'
 export default defineComponent({
   components: {
+    ElAvatar,
     ElMenu,
     ElMenuItem,
     NavSearch,
-    RelatedInfo
+    NavLogin,
+    LoginRegister,
+    RelatedInfo,
+    UserPersonal
   },
   setup() {
     // 引入路由
     const router = useRouter()
+    // 引入store
+    const store = useStore()
 
     // 菜单选中项下标
     const activeIndex = ref('1')
 
+    // 展示用户信息还是登录界面  有值（true）就用户，没值（false）就登录
+    const isShowUserPersonalOrLogin = computed(() => store.state.login.token)
+
+    // 点击展示login页面
+    const showLoginPage = () => {
+      if (JSON.stringify(store.state.login.userPersonalInfo) == '{}')
+        store.dispatch('login/tokenGetUserInfo')
+      store.commit('login/changeShowLoginPage', true)
+    }
+
     return {
       router,
-      activeIndex
+      activeIndex,
+      isShowUserPersonalOrLogin,
+      showLoginPage,
+      store
     }
   }
 })
@@ -56,7 +95,7 @@ export default defineComponent({
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 9999;
+  z-index: 99;
   // margin-right: calc(100% - 100vw);
   .el-menu {
     height: 60px;
@@ -75,6 +114,10 @@ export default defineComponent({
     .flex-grow {
       flex-grow: 1;
     }
+  }
+  // 头像
+  :deep .demo-type {
+    margin-top: -7px;
   }
 }
 </style>

@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import { IRootState, IStoreType, IRequestQueryType } from './type'
 import login from './login'
-import user from './user'
+import user from './user-manage'
 import fruit from './fruit'
 
 const store = createStore<IRootState>({
@@ -38,6 +38,11 @@ const store = createStore<IRootState>({
 // 自定义一个Store，为了更好兼容ts类型（类型有提示）
 export function useStore(): Store<IStoreType> {
   return useVuexStore()
+}
+
+// 挂载前执行获取用户信息
+export function setupStore() {
+  store.dispatch('login/tokenGetUserInfo')
 }
 
 export default store

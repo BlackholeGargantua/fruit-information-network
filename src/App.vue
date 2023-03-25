@@ -5,6 +5,9 @@
 body {
   padding: 0;
   margin: 0;
+
+  // 屏蔽 el-drawer 生成的 修改body的宽度
+  width: 100vw !important;
   // overflow-y: overlay;
 }
 // 以下为了解决滚动条出现挤压页面宽度

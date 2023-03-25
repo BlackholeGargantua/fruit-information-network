@@ -6,6 +6,7 @@
     </div>
     <router-view></router-view>
   </div>
+
   <el-pagination
     :background="true"
     layout="prev, pager, next"

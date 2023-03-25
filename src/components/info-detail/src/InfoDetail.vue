@@ -3,7 +3,12 @@
     <el-aside>
       <el-image :src="fruitInfoData.img_url" :initial-index="10" fit="cover"></el-image>
       <el-card class="box-card" shadow="never">
-        <div class="text-item" v-for="info in simpleInfo" :key="info.id" v-show="info.value">
+        <div
+          class="text-item"
+          v-for="info in simpleInfo"
+          :key="info.id"
+          v-show="fruitInfoData[info.value] != null"
+        >
           {{ info.title + '：' + fruitInfoData[info.value] }}
         </div>
       </el-card>

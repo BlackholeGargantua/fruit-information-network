@@ -1,5 +1,5 @@
 import ILoginState from './login/type'
-import IUserState from './user/type'
+import IUserState from './user-manage/type'
 import IFruitState from './fruit/type'
 
 // 发起请求获取 fruitInfo信息 参数类型，
