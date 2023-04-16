@@ -47,7 +47,7 @@
       />
     </template>
   </data-table>
-  <el-dialog v-model="showAddOrEditPage" title="新增水果信息" width="45%" center align-center>
+  <el-dialog v-model="showAddOrEditPage" :title="dialogTitle" width="45%" center align-center>
     <el-form
       ref="fruitDataFromRef"
       :model="fruitDataFrom"
@@ -221,6 +221,9 @@ const searchValue = computed(() => dataSearchRef.value?.searchValue)
 // 表格水果信息数据
 const fruitInfo = computed(() => store.state.fruitInfo)
 
+// 弹出框标题
+const dialogTitle = ref('新增水果信息')
+
 // 展示新增或编辑框
 const showAddOrEditPage = ref(false)
 
@@ -295,7 +298,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         // 发起请求删除水果
         if (isAddOrUpdate.value == 'add') await store.dispatch('fruit/fruitAdd', fruitDataFrom)
         if (isAddOrUpdate.value == 'update')
-          await store.dispatch('user/updateUser', {
+          await store.dispatch('fruit/updateFruitInfo', {
             id: deleteOrUpdateFruitInfoId.value,
             ...fruitDataFrom
           })
@@ -353,6 +356,7 @@ const handleCurrentChange = (currentPage: number) => {
 // 点击新增事件
 const addFruitInfo = () => {
   showAddOrEditPage.value = true
+  dialogTitle.value = '新增水果信息'
   isAddOrUpdate.value = 'add'
   // 清空表单
   Object.keys(fruitDataFrom).forEach((key) => {
@@ -363,10 +367,18 @@ const addFruitInfo = () => {
 // 编辑
 const editFruitInfo = (fruitDataFromItem: fruitDataFromType<string | number>) => {
   showAddOrEditPage.value = true
+  dialogTitle.value = '更新水果信息'
+  isAddOrUpdate.value = 'update'
   deleteOrUpdateFruitInfoId.value = fruitDataFromItem.id
   Object.keys(fruitDataFrom).forEach((key) => {
     fruitDataFrom[key] = fruitDataFromItem[key]
   })
+  if (typeof fruitDataFrom.img_url === 'string') {
+    const startPosition = fruitDataFrom.img_url.lastIndexOf('-') + 1 // 获取 '-' 的下一个字符的位置
+    const endPosition = fruitDataFrom.img_url.indexOf('.') // 获取 '.' 的位置
+    const fileName = fruitDataFrom.img_url.substring(startPosition, endPosition) // 使用 substring 方法提取在指定位置之间的子字符串
+    fileList.value.push({ name: fileName, url: fruitDataFrom.img_url })
+  }
 }
 
 // 删除

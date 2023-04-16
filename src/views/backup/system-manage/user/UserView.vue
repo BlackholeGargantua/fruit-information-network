@@ -46,7 +46,7 @@
       />
     </template>
   </data-table>
-  <el-dialog v-model="showAddOrEditPage" title="新增用户信息" width="45%" center align-center>
+  <el-dialog v-model="showAddOrEditPage" :title="dialogTitle" width="45%" center align-center>
     <el-form
       ref="userDataFromRef"
       :model="userDataFrom"
@@ -147,6 +147,9 @@ const searchValue = computed(() => dataSearchRef.value?.searchValue)
 // 获取并监听用户数据
 const userInfo = computed(() => store.state.user.userInfo)
 
+// 弹出框标题
+const dialogTitle = ref('新增用户')
+
 // 展示新增或编辑框
 const showAddOrEditPage = ref(false)
 
@@ -243,6 +246,7 @@ const handleCurrentChange = (currentPage: number) => {
 // 点击新增事件
 const addUser = () => {
   showAddOrEditPage.value = true
+  dialogTitle.value = '新增用户信息'
   isAddOrUpdate.value = 'add'
   // 清空表单
   Object.keys(userDataFrom).forEach((key) => {
@@ -254,6 +258,7 @@ const addUser = () => {
 const editUser = (userDataFromItem: userDataFromType<string | number>) => {
   showAddOrEditPage.value = true
   noHiddenPWD.value = false
+  dialogTitle.value = '更新用户信息'
   // 编辑水果id
   deleteOrUpdateUserId.value = userDataFromItem.id
   isAddOrUpdate.value = 'update'

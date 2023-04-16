@@ -52,6 +52,7 @@ const fruitMoudle: Module<IFruitState, IRootState> = {
     },
     // 更新水果信息
     async updateFruitInfo({ commit }, paylod: any) {
+      console.log(paylod)
       await axios.put('/fruitInfo/update', { ...paylod }).then((res) => {
         if (res.data.code === '20000') {
           elMessage({ message: '更新成功', type: 'success' })
