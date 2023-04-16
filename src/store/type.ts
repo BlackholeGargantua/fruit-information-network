@@ -7,6 +7,8 @@ export interface IRequestQueryType {
   pageNumber: number
   pageSize: number
   fruitType?: string
+  fruitName?: string
+  username?: string
 }
 
 // 根store类型

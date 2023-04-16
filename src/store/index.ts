@@ -15,13 +15,29 @@ const store = createStore<IRootState>({
     }
   },
   actions: {
-    // 获取水果分类或全部信息，默认查询 1页10条
+    // 获取水果分类或全部信息，默认查询 1页20条
     async getFruitAllTypeInfo(
       { commit },
       payload: IRequestQueryType = { pageNumber: 1, pageSize: 20 }
     ) {
       await axios
         .get('/fruitInfo/findAllType', {
+          params: {
+            ...payload
+          }
+        })
+        .then((res) => {
+          const { data } = res.data
+          commit('changeFruitInfo', data)
+        })
+    },
+    // 水果搜索分页，默认查询 1页20条
+    async getFruitNamePage(
+      { commit },
+      payload: IRequestQueryType = { pageNumber: 1, pageSize: 20 }
+    ) {
+      await axios
+        .get('/fruitInfo/findPageAll', {
           params: {
             ...payload
           }

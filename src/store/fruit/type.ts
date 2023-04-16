@@ -20,4 +20,5 @@ export interface IFruitDetail {
 }
 export default interface IFruitState {
   fruitDetail: IFruitDetail
+  showAddInfoDialog: boolean
 }

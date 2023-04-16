@@ -126,20 +126,6 @@ export default defineComponent({
     margin-left: 4px;
   }
 
-  // 登录/注册 未选中颜色
-  :deep .el-tabs--border-card > .el-tabs__header .el-tabs__item {
-    color: @main-color;
-  }
-
-  // 登录/注册 选中颜色
-  :deep .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
-    color: @option-color;
-  }
-  // 鼠标悬浮 登录/注册 颜色
-  :deep .el-tabs--border-card > .el-tabs__header .el-tabs__item:not(.is-disabled):hover {
-    color: @option-color;
-  }
-
   // 记住/忘记 密码
   .control-account {
     margin-top: 12px;
@@ -165,9 +151,6 @@ export default defineComponent({
   .login-btn {
     margin-top: 10px;
     width: 100%;
-  }
-  .el-button--success {
-    --el-button-bg-color: @option-color;
   }
 }
 </style>

@@ -74,11 +74,12 @@ export default defineComponent({
     // 左侧信息
     const simpleInfo = [
       { id: 1, title: '学名', value: 'scientific_name' },
-      { id: 2, title: '拼音', value: 'pinyin' },
-      { id: 3, title: '英文名', value: 'english_name' },
-      { id: 4, title: '别称', value: 'nick_name' },
-      { id: 5, title: '查阅量', value: 'views' },
-      { id: 6, title: '更新时间', value: 'update_time' }
+      { id: 2, title: '类别', value: 'type' },
+      { id: 3, title: '拼音', value: 'pinyin' },
+      { id: 4, title: '英文名', value: 'english_name' },
+      { id: 5, title: '别称', value: 'nick_name' },
+      { id: 6, title: '查阅量', value: 'views' },
+      { id: 7, title: '更新时间', value: 'update_time' }
     ]
     // 右侧信息
     const mainInfo = [

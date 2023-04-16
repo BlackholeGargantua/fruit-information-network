@@ -45,7 +45,7 @@ export default defineComponent({
       formRef.value?.validate((valid) => {
         // 判断验证是否通过
         if (valid) {
-          // 发起请求获取用户数据
+          // 发起请求注册用户
           store.dispatch('login/userRegister', account)
         }
       })

@@ -5,7 +5,11 @@ import type { FormRules } from 'element-plus'
 export const loginRules = {
   username: [
     { required: true, message: '用户名不能为空', trigger: 'blur' },
-    { pattern: /^[a-z0-9]{3,15}$/, message: '必须是3~15个字母或者数字', trigger: 'blur' }
+    {
+      pattern: /^[\u4e00-\u9fa5a-z_.]{3,15}$/,
+      message: '长度3~15的中文、字母、下划线和点',
+      trigger: 'blur'
+    }
   ],
   password: [
     { required: true, message: '密码不能为空', trigger: 'blur' },

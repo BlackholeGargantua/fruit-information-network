@@ -3,10 +3,13 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 // 引入main-nav路由导航内容
 import mainContent from './home/main-content'
 
+// 后台管理路由
+import backupNav from './backup'
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/backup'
   },
   {
     path: '/home',
@@ -18,6 +21,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/info',
     name: 'info',
     component: () => import('@/views/info/InfoView.vue')
+  },
+  {
+    path: '/backup',
+    name: 'backup',
+    component: () => import('@/views/backup/BackupView.vue'),
+    children: backupNav
   },
   {
     path: '/:pathMatch(.*)*',

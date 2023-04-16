@@ -11,6 +11,7 @@ interface IUserPersonalInfo {
 interface ILoginState<T = IUserPersonalInfo> {
   showButtonLoading: boolean //是否显示按钮动画
   showLoginPage: boolean //是否展示登录页面
+  showAddInfoDialog: boolean
   token: string
   userPersonalInfo: T
 }

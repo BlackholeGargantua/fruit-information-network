@@ -13,6 +13,7 @@ const loginModule: Module<ILoginState<any>, IRootState> = {
     return {
       showButtonLoading: false,
       showLoginPage: false,
+      showAddInfoDialog: true,
       token: '',
       userPersonalInfo: {}
     }
@@ -25,6 +26,9 @@ const loginModule: Module<ILoginState<any>, IRootState> = {
     // 是否展示 按钮动画
     changeShowLoginPage(state, paylod) {
       state.showLoginPage = paylod
+    },
+    changeShowDialog(state, payload) {
+      state.showAddInfoDialog = payload
     },
 
     // 保存用户信息
@@ -44,11 +48,18 @@ const loginModule: Module<ILoginState<any>, IRootState> = {
     // token获取用户信息
     async tokenGetUserInfo({ commit }) {
       const locatToken = localCache.getCache('token')
-      await axios.get('/user/info', { params: { token: locatToken } }).then((res) => {
-        if (res.data.code === '20000') {
-          commit('changeUserInfo', { userPersonalInfo: res.data.data, token: locatToken })
-        }
-      })
+      if (locatToken) {
+        await axios.get('/user/info', { params: { token: locatToken } }).then((res) => {
+          if (res.data.code === '20000' && JSON.stringify(res.data.data) != '{}') {
+            commit('changeUserInfo', { userPersonalInfo: res.data.data, token: locatToken })
+          } else if (res.data.code == '-2') {
+            // token失效
+            elMessage({ message: res.data.msg, type: 'error', duration: 2000 })
+            // 清除失效的token
+            localCache.deleteCache('token')
+          }
+        })
+      }
     },
     // 登录
     async userLogin({ commit }, paylod: any) {
@@ -64,16 +75,16 @@ const loginModule: Module<ILoginState<any>, IRootState> = {
     },
     // 注册
     async userRegister({ commit }, paylod: any) {
-      await axios
-        .post('/user/register', { username: paylod.username, password: paylod.password })
-        .then((res) => {
-          if (res.data.code === '20000') elMessage({ message: '账号注册成功', type: 'success' })
-          else if (res.data.code === '-1')
-            elMessage({ message: '该用户名已存在', type: 'warning', duration: 2000 })
-          else elMessage({ message: '账号注册失败，请重试！', type: 'error', duration: 2000 })
-          // 关闭按钮动画
-          commit('changeShowButtonLoading', false)
-        })
+      await axios.post('/user/register', { ...paylod }).then((res) => {
+        if (res.data.code === '20000') {
+          elMessage({ message: '账号注册成功', type: 'success' })
+          commit('changeShowDialog', false)
+        } else if (res.data.code === '-1')
+          elMessage({ message: '该用户名已存在', type: 'warning', duration: 2000 })
+        else elMessage({ message: '账号注册失败，请重试！', type: 'error', duration: 2000 })
+        // 关闭按钮动画
+        commit('changeShowButtonLoading', false)
+      })
     }
   }
 }

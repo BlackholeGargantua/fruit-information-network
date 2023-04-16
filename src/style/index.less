@@ -1,3 +1,22 @@
 // 全局主题样式
 @main-color: #5d3d21;
 @option-color: #40a070;
+
+/*
+ *按钮颜色
+ */
+//未选中颜色
+:deep(.el-tabs--border-card > .el-tabs__header .el-tabs__item) {
+  color: @main-color;
+}
+//选中颜色
+:deep(.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active) {
+  color: @option-color;
+}
+//鼠标悬浮 颜色
+:deep(.el-tabs--border-card > .el-tabs__header .el-tabs__item:not(.is-disabled):hover) {
+  color: @option-color;
+}
+:deep(.el-button--success) {
+  --el-button-bg-color: @option-color;
+}
