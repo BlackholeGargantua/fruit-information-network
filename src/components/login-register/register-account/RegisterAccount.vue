@@ -49,6 +49,10 @@ export default defineComponent({
           store.dispatch('login/userRegister', account)
         }
       })
+      // 不管有无结果5秒后关闭按钮动画
+      setTimeout(() => {
+        if (store.state.login.token) store.commit('login/changeShowLoginPage', false)
+      }, 5000)
     }
 
     // 表单验证规则
@@ -56,7 +60,7 @@ export default defineComponent({
       ...registerRules,
       confirmPassword: [
         { required: true, message: '请再次输入密码', trigger: 'blur' },
-        { pattern: /^[a-z0-9]{3,}$/, message: '必须是3位以上数字或字母', trigger: 'blur' },
+        { pattern: /^[a-zA-Z0-9]{3,}$/, message: '必须是3位以上数字或字母', trigger: 'blur' },
         {
           validator: (rule: any, value: any, callback: any) => {
             if (value !== account.password) {

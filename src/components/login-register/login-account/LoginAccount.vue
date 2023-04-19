@@ -57,6 +57,10 @@ export default defineComponent({
           store.dispatch('login/userLogin', account)
         }
       })
+      // 不管有无结果5秒后关闭按钮动画
+      setTimeout(() => {
+        store.commit('login/changeShowButtonLoading', false)
+      }, 5000)
     }
 
     return { account, loginRules, formRef, loginAction }

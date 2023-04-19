@@ -95,7 +95,6 @@ import type { FormInstance, FormRules } from 'element-plus'
 
 const dialogVisible = true
 
-const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive({
   name: 'Hello',

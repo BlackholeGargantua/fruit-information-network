@@ -53,6 +53,35 @@ const loginModule: Module<IUserState, IRootState> = {
           elMessage({ message: '删除失败', type: 'warning', duration: 2000 })
         else elMessage({ message: '操作异常，请重试！', type: 'error', duration: 2000 })
       })
+    },
+    // 新增用户浏览记录
+    async addUserHistory(state, payload) {
+      await axios.post('/historys/insert', { ...payload }).then((res) => {
+        if (res.data.code === '20000') {
+          state.dispatch('login/getHistory', null, { root: true })
+          console.log('新增用户浏览记录成功', payload)
+        }
+      })
+    },
+    // 新增用户收藏记录
+    async addUserfavoriteRecords(state, payload) {
+      await axios.post('/favorites/insert', { ...payload }).then((res) => {
+        if (res.data.code === '20000') {
+          state.dispatch('login/getfavoriteRecords', null, { root: true })
+          console.log('新增收藏浏览记录成功', payload)
+        }
+      })
+    },
+    // 删除用户收藏记录
+    async deleteUserfavoriteRecords(state, payload) {
+      await axios
+        .delete('/favorites/delete', { params: { uid: payload.uid, id: payload.id } })
+        .then((res) => {
+          if (res.data.code === '20000') {
+            state.dispatch('login/getfavoriteRecords', null, { root: true })
+            console.log('删除收藏记录成功', payload)
+          }
+        })
     }
   }
 }

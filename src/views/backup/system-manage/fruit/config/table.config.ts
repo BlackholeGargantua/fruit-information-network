@@ -44,6 +44,7 @@ export const rules = reactive<FormRules>({
     { pattern: /^[a-zA-Z\s]+$/, message: '只能输入英文字母', trigger: 'blur' },
     { pattern: /^[^\s].*$/, message: '不能以空格开头', trigger: 'blur' }
   ],
+  views: [{ pattern: /^\d+$/, message: '只能输入英文字母', trigger: 'blur' }],
   essential_information: [
     { required: true, message: '不能为空', trigger: 'blur' },
     {

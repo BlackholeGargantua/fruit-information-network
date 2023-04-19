@@ -12,15 +12,21 @@
           {{ info.title + '：' + fruitInfoData[info.value] }}
         </div>
       </el-card>
+      <el-tooltip v-if="collect.showColletIcon" :content="collect.tip" placement="bottom">
+        <el-icon style="cursor: pointer" size="44" :color="collect.color" @click="isCollet"
+          ><StarFilled
+        /></el-icon>
+      </el-tooltip>
     </el-aside>
     <el-main>
       <div class="demo-collapse">
-        <el-collapse v-model="activeNames" :accordion="true">
+        <el-collapse v-model="mainInfo[0].id" :accordion="true">
           <el-collapse-item
             v-for="info in mainInfo"
             :key="info.id"
             v-show="fruitInfoData[info.value] != null"
             :title="info.title"
+            :name="info.id"
           >
             <div>{{ fruitInfoData[info.value] }}</div>
           </el-collapse-item>
@@ -31,44 +37,81 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onBeforeMount, computed } from 'vue'
+import { defineComponent, reactive, onBeforeMount, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '@/store'
 import {
-  ElContainer,
+  ElAside,
   ElMain,
+  ElContainer,
   ElCard,
   ElImage,
-  ElAside,
+  ElIcon,
   ElCollapse,
-  ElCollapseItem
+  ElCollapseItem,
+  ElTooltip
 } from 'element-plus'
+import { StarFilled } from '@element-plus/icons-vue'
 import { fruitInfoType } from './type'
 export default defineComponent({
   components: {
-    ElContainer,
-    ElMain,
     ElAside,
-    ElImage,
+    ElContainer,
     ElCard,
+    ElMain,
+    ElImage,
+    ElIcon,
     ElCollapse,
-    ElCollapseItem
+    ElCollapseItem,
+    ElTooltip,
+
+    StarFilled
   },
   setup() {
     const router = useRouter()
     const store = useStore()
+
+    interface newFruitInfoDataType {
+      [key: string]: number // 声明对象类型
+    }
 
     // 请求水果数据
     onBeforeMount(() => {
       store.dispatch('fruit/getFruitDetai', router.currentRoute.value.query.fruitName)
     })
 
-    // 内容详情
-    const fruitInfoData: fruitInfoType = computed(() => store.state.fruit.fruitDetail)
-    // console.log(fruitInfoData.value)
+    onMounted(() => {
+      // 给浏览量+1
+      if (JSON.stringify(store.state.fruit.fruitDetail) !== '{}') {
+        const newFruitInfoData: newFruitInfoDataType = {}
+        let fruit: any = store.state.fruit.fruitDetail
+        for (let key in store.state.fruit.fruitDetail) {
+          if (key === 'views') newFruitInfoData[key] = fruit[key] + 1
+          else newFruitInfoData[key] = fruit[key]
+        }
+        store.dispatch('fruit/updateFruitInfoViews', newFruitInfoData)
+      }
+    })
 
-    // 默认要展开的内容name
-    const activeNames = ref(['1', '2'])
+    // 收藏
+    const collect = reactive({
+      showColletIcon: false,
+      isCollet: false,
+      tip: '点击收藏',
+      color: '#c29a78'
+    })
+
+    // 水果内容详情
+    const fruitInfoData: fruitInfoType = computed({
+      set: () => store.state.fruit.fruitDetail,
+      get: () => store.state.fruit.fruitDetail
+    })
+
+    // 登录的用户信息
+    const loginUser = computed({
+      set: () => store.state.login.userPersonalInfo,
+      get: () => store.state.login.userPersonalInfo
+    })
 
     // 重新分类数据，方便展示
     // 左侧信息
@@ -94,11 +137,99 @@ export default defineComponent({
       { id: 9, title: '注意事项', value: 'matters_needing_attention' }
     ]
 
+    // 监听水果信息的变化（目前只有跳转到 /info 页用到store.state.fruit.fruitDetail），如果其它页也用到不能再使用此逻辑
+    watch(
+      () => store.state.fruit.fruitDetail,
+      (newValue, oldValue) => {
+        // newValue 有值、不为空对象、不等于旧值
+        if (
+          JSON.stringify(newValue) &&
+          JSON.stringify(newValue) != '{}' &&
+          JSON.stringify(oldValue) !== JSON.stringify(newValue)
+        ) {
+          // 给用户添加历史记录
+          let userPersonalInfo = store.state.login.userPersonalInfo
+          console.log(JSON.stringify(userPersonalInfo))
+          if (JSON.stringify(userPersonalInfo) !== '{}') {
+            store.dispatch('user/addUserHistory', {
+              uid: userPersonalInfo.id,
+              fruit_name: newValue.scientific_name,
+              type: newValue.type,
+              img_url: newValue.img_url
+            })
+          }
+        }
+      }
+      // { immediate: true }
+    )
+
+    interface oneCollectFruitInfoType {
+      fruit_name?: string
+      id?: number
+      img_url?: string
+      type?: string
+      uid?: number
+    }
+
+    // 收藏的某个水果
+    let oneCollectFruitInfo: oneCollectFruitInfoType = {}
+
+    // 监听用户最新收藏记录
+    watch(
+      [() => store.state.login.favoriteRecords, () => store.state.login.userPersonalInfo],
+      ([newfavoriteValue, newUserInfo]) => {
+        // 判断用户信息是否为空
+        if (JSON.stringify(newUserInfo) !== '{}') {
+          // 显示收藏按钮
+          collect.showColletIcon = true
+          // 查找点击的水果是否在收藏列表
+          const fruit: any = newfavoriteValue.find((item) => {
+            return item.fruit_name === router.currentRoute.value.query.fruitName // 查找用户名为"Steve"的用户
+          })
+          oneCollectFruitInfo = { ...fruit }
+          if (fruit !== undefined) {
+            collect.isCollet = true
+            collect.color = '#40a070'
+            collect.tip = '点击取消收藏'
+          } else {
+            collect.isCollet = false
+            collect.color = '#c29a78'
+            collect.tip = '点击收藏'
+          }
+        }
+      },
+      { immediate: true }
+    )
+
+    // 点击收藏后操作
+    const isCollet = () => {
+      collect.isCollet = !collect.isCollet
+      if (collect.isCollet) {
+        collect.tip = '点击取消收藏'
+        collect.color = '#40a070'
+        // 添加收藏
+        store.dispatch('user/addUserfavoriteRecords', {
+          uid: loginUser.value.id,
+          fruit_name: fruitInfoData.value.scientific_name,
+          type: fruitInfoData.value.type,
+          img_url: fruitInfoData.value.img_url
+        })
+      } else {
+        collect.tip = '点击收藏'
+        collect.color = '#c29a78'
+        store.dispatch('user/deleteUserfavoriteRecords', {
+          uid: loginUser.value.id,
+          id: oneCollectFruitInfo.id
+        })
+      }
+    }
+
     return {
-      activeNames,
       fruitInfoData,
       mainInfo,
-      simpleInfo
+      simpleInfo,
+      collect,
+      isCollet
     }
   }
 })

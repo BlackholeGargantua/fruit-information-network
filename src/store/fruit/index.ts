@@ -11,11 +11,17 @@ const fruitMoudle: Module<IFruitState, IRootState> = {
   state() {
     return {
       fruitDetail: {},
+      fruitHistory: {},
       showAddInfoDialog: true
     }
   },
   mutations: {
+    // 修改某个水果信息
     changeFruitDetail(state, payload) {
+      state.fruitDetail = payload
+    },
+    // 记录历史记录（某个水果）
+    changeFruitHistory(state, payload) {
       state.fruitDetail = payload
     },
     changeShowDialog(state, payload) {
@@ -52,12 +58,19 @@ const fruitMoudle: Module<IFruitState, IRootState> = {
     },
     // 更新水果信息
     async updateFruitInfo({ commit }, paylod: any) {
-      console.log(paylod)
       await axios.put('/fruitInfo/update', { ...paylod }).then((res) => {
         if (res.data.code === '20000') {
           elMessage({ message: '更新成功', type: 'success' })
           commit('changeShowDialog', false)
         } else elMessage({ message: '更新失败，请重试！', type: 'error', duration: 2000 })
+      })
+    },
+    // 更新水果浏览量
+    async updateFruitInfoViews({ commit }, paylod: any) {
+      await axios.put('/fruitInfo/update', { ...paylod }).then((res) => {
+        if (res.data.code === '20000') {
+          commit('changeShowDialog', false)
+        }
       })
     },
     // 删除水果信息
