@@ -11,7 +11,7 @@
       active-text-color="#5d3d21"
       background-color="#40a070"
       :default-active="
-        router.currentRoute.value.path == '/backup'
+        router.currentRoute.value.path === '/backup'
           ? '/backup/system-overview'
           : router.currentRoute.value.path
       "

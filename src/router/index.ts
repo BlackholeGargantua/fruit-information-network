@@ -32,6 +32,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/backup',
     name: 'backup',
+    redirect: '/backup/system-overview',
     component: () => import('@/views/backup/BackupView.vue'),
     children: backupNav,
     beforeEnter: async (to, from, next) => {
