@@ -8,7 +8,7 @@ import fruit from './fruit'
 import information from './information'
 
 const store = createStore<IRootState>({
-  state: { fruitInfo: {}, banner: [] },
+  state: { fruitInfo: {}, banner: [], mainSearchValue: '' },
   getters: {},
   mutations: {
     changeFruitInfo(state, payload) {
@@ -17,6 +17,10 @@ const store = createStore<IRootState>({
     // 修改bannner
     changeBanner(state, payload) {
       state.banner = payload
+    },
+    // 首页搜索框的值
+    changeMainSearchValue(state, payload) {
+      state.mainSearchValue = payload
     }
   },
   actions: {

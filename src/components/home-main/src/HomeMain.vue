@@ -9,6 +9,7 @@
 
   <el-pagination
     :background="true"
+    v-show="fruitInfo.total !== 0"
     layout="prev, pager, next"
     @current-change="handleCurrentChange"
     :current-page="fruitInfo.current"
@@ -42,20 +43,31 @@ export default defineComponent({
 
     // 修改分页组件页数
     const handleCurrentChange = (currentPage: number) => {
-      if (
-        router.currentRoute.value.query.fruitType === '全部' ||
-        JSON.stringify(router.currentRoute.value.query) == '{}'
-      )
-        store.dispatch('getFruitAllTypeInfo', {
+      // 判断搜索框有没有值
+      if (store.state.mainSearchValue !== '') {
+        store.dispatch('getFruitNamePage', {
           pageNumber: currentPage,
-          pageSize: 20
+          pageSize: 30,
+          fruitName: store.state.mainSearchValue
         })
-      else
-        store.dispatch('getFruitAllTypeInfo', {
-          pageNumber: currentPage,
-          pageSize: 20,
-          ...router.currentRoute.value.query
-        })
+      }
+      // 不是搜索就按分类发起请求
+      else {
+        if (
+          router.currentRoute.value.query.fruitType === '全部' ||
+          JSON.stringify(router.currentRoute.value.query) == '{}'
+        )
+          store.dispatch('getFruitAllTypeInfo', {
+            pageNumber: currentPage,
+            pageSize: 20
+          })
+        else
+          store.dispatch('getFruitAllTypeInfo', {
+            pageNumber: currentPage,
+            pageSize: 20,
+            ...router.currentRoute.value.query
+          })
+      }
     }
 
     // 是否展示swiper
