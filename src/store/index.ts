@@ -7,11 +7,15 @@ import user from './user-manage'
 import fruit from './fruit'
 
 const store = createStore<IRootState>({
-  state: { fruitInfo: {} },
+  state: { fruitInfo: {}, banner: [] },
   getters: {},
   mutations: {
     changeFruitInfo(state, payload) {
       state.fruitInfo = payload
+    },
+    // 修改bannner
+    changeBanner(state, payload) {
+      state.banner = payload
     }
   },
   actions: {
@@ -46,6 +50,16 @@ const store = createStore<IRootState>({
           const { data } = res.data
           commit('changeFruitInfo', data)
         })
+    },
+    // 获取banner信息
+    async getBanners({ commit }) {
+      await axios.get('/banner/all').then((res) => {
+        if (res.data.code == '20000') {
+          const { data } = res.data
+          console.log('获取banner success', data)
+          commit('changeBanner', data)
+        }
+      })
     }
   },
   modules: { fruit, login, user }

@@ -1,23 +1,47 @@
 <template>
   <div class="home-swiper">
     <el-carousel indicator-position="outside" height="450px" :autoplay="false">
-      <el-carousel-item v-for="item in 4" :key="item">
-        <h3 text="2xl">{{ item }}</h3>
+      <el-carousel-item v-for="item in banner" :key="item.id" @click.prevent="goToInfo(item.name)">
+        <el-image style="width: 100%; height: 100%" :src="item.img_url" fit="cover" />
       </el-carousel-item>
     </el-carousel>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { ElCarousel, ElCarouselItem } from 'element-plus'
+import { defineComponent, onBeforeMount, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from '@/store'
+import { ElCarousel, ElCarouselItem, ElImage } from 'element-plus'
 export default defineComponent({
   components: {
     ElCarousel,
-    ElCarouselItem
+    ElCarouselItem,
+    ElImage
   },
   setup() {
-    return {}
+    const router = useRouter()
+    const store = useStore()
+
+    // 挂载之前获取banner
+    onBeforeMount(() => {
+      store.dispatch('getBanners')
+    })
+
+    // 获取最新banner
+    const banner = computed(() => store.state.banner)
+
+    // 点击banner后跳转到对应的信息界面
+    const goToInfo = (fruitName: any) => {
+      router.push({
+        path: '/info',
+        query: {
+          fruitName: fruitName
+        }
+      })
+    }
+
+    return { banner, goToInfo }
   }
 })
 </script>
@@ -26,15 +50,9 @@ export default defineComponent({
 .home-swiper {
   flex: 312;
   min-width: 400px;
-  /* 字体的样式 */
-  .el-carousel__item h3 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #475669;
-    opacity: 0.75;
-    line-height: 450px;
-    margin: 0;
+
+  .el-carousel__item {
+    cursor: pointer;
   }
 
   .el-carousel__item:nth-child(2n) {
