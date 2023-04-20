@@ -9,9 +9,7 @@
           <nav-header @foldChange="handleFoldChange" />
         </el-header>
         <el-main class="page-content">
-          <div class="page-info">
-            <router-view></router-view>
-          </div>
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -39,6 +37,8 @@ export default defineComponent({
 
     // 挂载前获取数据
     onBeforeMount(() => {
+      // 获取所有水果信息
+      store.dispatch('fruit/getAllFruit')
       // 获取水果
       store.dispatch('getFruitAllTypeInfo', {
         pageNumber: 1,
@@ -77,10 +77,6 @@ export default defineComponent({
 
 .page-content {
   height: calc(100% - 48px);
-
-  .page-info {
-    border-radius: 5px;
-  }
 }
 
 .el-header,

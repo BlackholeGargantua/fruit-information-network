@@ -1,5 +1,5 @@
 import { Module } from 'vuex'
-
+import cache from '@/utils/cache'
 import elMessage from '@/hooks/el-message'
 
 import { IRootState } from '../type'
@@ -11,10 +11,17 @@ const fruitMoudle: Module<IFruitState, IRootState> = {
   state() {
     return {
       fruitDetail: {},
+      allFruitInfo: [],
       showAddInfoDialog: true
     }
   },
   mutations: {
+    // 修改所有水果信息
+    changeAllFruit(state, payload) {
+      state.allFruitInfo = payload
+      cache.setCache('allFruitInfo', payload)
+    },
+    // 修改某个水果信息
     changeFruitDetail(state, payload) {
       state.fruitDetail = payload
     },
@@ -23,6 +30,16 @@ const fruitMoudle: Module<IFruitState, IRootState> = {
     }
   },
   actions: {
+    // 获取全部水果信息
+    async getAllFruit({ commit }) {
+      await axios
+        .get('/fruitInfo/all')
+        .then((res) => {
+          const { data } = res.data
+          commit('changeAllFruit', data)
+        })
+        .catch((err) => console.log(err))
+    },
     // 获取某个水果的信息
     async getFruitDetai({ commit }, payload) {
       commit('changeShowDialog', false)

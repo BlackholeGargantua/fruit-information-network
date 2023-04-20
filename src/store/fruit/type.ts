@@ -19,6 +19,7 @@ export interface IFruitDetail {
   img_url?: string
 }
 export default interface IFruitState {
+  allFruitInfo: IFruitDetail[]
   fruitDetail: IFruitDetail
   showAddInfoDialog: boolean
 }

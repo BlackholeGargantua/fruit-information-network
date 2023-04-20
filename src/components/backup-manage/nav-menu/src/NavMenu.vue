@@ -5,6 +5,7 @@
       <span v-if="!collapse" class="title">水果情报网</span>
     </div>
     <el-menu
+      style="position: relative"
       class="el-menu-vertical"
       :collapse="collapse"
       active-text-color="#5d3d21"
@@ -39,6 +40,12 @@
           </template>
         </el-sub-menu>
       </template>
+      <el-button
+        color="#5d3d21"
+        style="position: absolute; bottom: 0; width: 100%"
+        @click="router.push('/home')"
+        >返回首页</el-button
+      >
     </el-menu>
   </div>
 </template>
@@ -46,11 +53,12 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMenu, ElMenuItem, ElMenuItemGroup, ElSubMenu, ElIcon } from 'element-plus'
+import { ElButton, ElMenu, ElMenuItem, ElMenuItemGroup, ElSubMenu, ElIcon } from 'element-plus'
 import { Location, Setting } from '@element-plus/icons-vue'
 
 export default defineComponent({
   components: {
+    ElButton,
     ElMenu,
     ElMenuItem,
     ElMenuItemGroup,
