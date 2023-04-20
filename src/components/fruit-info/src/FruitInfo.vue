@@ -137,7 +137,7 @@ export default defineComponent({
       { id: 9, title: '注意事项', value: 'matters_needing_attention' }
     ]
 
-    // 监听水果信息的变化（目前只有跳转到 /info 页用到store.state.fruit.fruitDetail），如果其它页也用到不能再使用此逻辑
+    // 监听水果信息的变化（目前只有跳转到 /fruit-info 页用到store.state.fruit.fruitDetail），如果其它页也用到不能再使用此逻辑
     watch(
       () => store.state.fruit.fruitDetail,
       (newValue, oldValue) => {

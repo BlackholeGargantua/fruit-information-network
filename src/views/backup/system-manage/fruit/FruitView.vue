@@ -373,6 +373,7 @@ const editFruitInfo = (fruitDataFromItem: fruitDataFromType<string | number>) =>
   Object.keys(fruitDataFrom).forEach((key) => {
     fruitDataFrom[key] = fruitDataFromItem[key]
   })
+  // 从图片地址中找到文件名
   if (typeof fruitDataFrom.img_url === 'string') {
     const startPosition = fruitDataFrom.img_url.lastIndexOf('-') + 1 // 获取 '-' 的下一个字符的位置
     const endPosition = fruitDataFrom.img_url.indexOf('.') // 获取 '.' 的位置
@@ -418,6 +419,6 @@ const confirmDelete = () => {
   --el-text-color-placeholder: @main-color;
 
   /*hover时候的文字颜色*/
-  --el-pagination-hover-color: @main-color;
+  --el-pagination-hover-color: @option-color;
 }
 </style>

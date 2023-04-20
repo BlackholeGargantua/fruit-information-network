@@ -11,17 +11,12 @@ const fruitMoudle: Module<IFruitState, IRootState> = {
   state() {
     return {
       fruitDetail: {},
-      fruitHistory: {},
       showAddInfoDialog: true
     }
   },
   mutations: {
     // 修改某个水果信息
     changeFruitDetail(state, payload) {
-      state.fruitDetail = payload
-    },
-    // 记录历史记录（某个水果）
-    changeFruitHistory(state, payload) {
       state.fruitDetail = payload
     },
     changeShowDialog(state, payload) {
@@ -47,7 +42,7 @@ const fruitMoudle: Module<IFruitState, IRootState> = {
     // 添加水果信息
     async fruitAdd(state, paylod: any) {
       await axios.post('/fruitInfo/insert', { ...paylod }).then((res) => {
-        console.log(res)
+        console.log(res, '添加结果')
         if (res.data.code === '20000') {
           elMessage({ message: '添加水果信息成功', type: 'success' })
           state.commit('changeShowDialog', false)

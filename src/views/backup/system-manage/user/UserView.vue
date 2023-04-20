@@ -304,7 +304,7 @@ const confirmDelete = () => {
   --el-text-color-placeholder: @main-color;
 
   /*hover时候的文字颜色*/
-  --el-pagination-hover-color: @main-color;
+  --el-pagination-hover-color: @option-color;
 }
 
 :deep(.el-form-item__label) {

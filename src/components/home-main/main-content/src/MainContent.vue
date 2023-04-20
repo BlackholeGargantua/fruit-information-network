@@ -29,7 +29,7 @@ const store = useStore()
 // 点击卡片后跳转到对应的信息界面
 const goToInfo = (fruitName: any) => {
   router.push({
-    path: '/info',
+    path: '/fruit-info',
     query: {
       fruitName: fruitName
     }

@@ -20,9 +20,14 @@ const routes: Array<RouteRecordRaw> = [
     children: mainContent
   },
   {
-    path: '/info',
-    name: 'info',
-    component: () => import('@/views/info/InfoView.vue')
+    path: '/fruit-info',
+    name: 'fruit-info',
+    component: () => import('@/views/fruit-info/FruitInfoView.vue')
+  },
+  {
+    path: '/information',
+    name: 'information',
+    component: () => import('@/views/information/InformationView.vue')
   },
   {
     path: '/backup',

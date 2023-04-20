@@ -1,6 +1,6 @@
 <template>
   <div class="home-swiper">
-    <el-carousel indicator-position="outside" height="450px" :autoplay="false">
+    <el-carousel indicator-position="outside" height="450px" autoplay>
       <el-carousel-item v-for="item in banner" :key="item.id" @click.prevent="goToInfo(item.name)">
         <el-image style="width: 100%; height: 100%" :src="item.img_url" fit="cover" />
       </el-carousel-item>
@@ -34,7 +34,7 @@ export default defineComponent({
     // 点击banner后跳转到对应的信息界面
     const goToInfo = (fruitName: any) => {
       router.push({
-        path: '/info',
+        path: '/fruit-info',
         query: {
           fruitName: fruitName
         }

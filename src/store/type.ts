@@ -1,6 +1,7 @@
 import ILoginState from './login/type'
 import IUserState from './user-manage/type'
 import IFruitState from './fruit/type'
+import IInformationState from './information/type'
 
 // 发起请求获取 fruitInfo信息 参数类型，
 export interface IRequestQueryType {
@@ -21,6 +22,7 @@ export interface IRootWithMoudle {
   fruit: IFruitState
   login: ILoginState
   user: IUserState
+  information: IInformationState
 }
 
 // 合并类型并导出

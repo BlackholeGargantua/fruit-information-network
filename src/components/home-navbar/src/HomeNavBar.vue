@@ -1,7 +1,9 @@
 <template>
   <div class="home-nav-bar">
     <el-menu
-      :default-active="activeIndex"
+      :default-active="
+        /^\/home.*/.test(router.currentRoute.value.path) ? '/home' : router.currentRoute.value.path
+      "
       :ellipsis="false"
       class="el-menu-demo"
       mode="horizontal"
@@ -10,12 +12,10 @@
       active-text-color="#40a070"
     >
       <button class="nav-head-img" />
-      <el-menu-item index="1" @click="router.push('/home')">首页</el-menu-item>
-      <el-menu-item>
-        <related-info></related-info>
-      </el-menu-item>
+      <el-menu-item index="/home" @click="router.push('/home')">首页</el-menu-item>
+      <el-menu-item index="/information" @click="router.push('/information')">资讯 </el-menu-item>
       <div class="flex-grow" />
-      <nav-search v-show="router.currentRoute.value.path !== '/info'"></nav-search>
+      <nav-search v-show="/^\/home.*/.test(router.currentRoute.value.path)"></nav-search>
       <el-menu-item index="showLogin" style="padding-right: 30px" @click="showLoginPage">
         <div
           v-if="!!isShowUserPersonalOrLogin"
@@ -44,7 +44,6 @@ import { useRouter } from 'vue-router'
 import { useStore } from '@/store'
 import { ElAvatar, ElMenu, ElMenuItem } from 'element-plus'
 import NavSearch from '@/components/home-navbar/nav-search/NavSearch.vue'
-import RelatedInfo from '@/components/home-navbar/related-info/RelatedInfo.vue'
 import NavLogin from '../nav-login/NavLogin.vue'
 import LoginRegister from '@/components/login-register'
 import UserPersonal from '@/components/user-personal-info'
@@ -56,7 +55,6 @@ export default defineComponent({
     NavSearch,
     NavLogin,
     LoginRegister,
-    RelatedInfo,
     UserPersonal
   },
   setup() {
@@ -80,10 +78,10 @@ export default defineComponent({
 
     return {
       router,
+      store,
       activeIndex,
       isShowUserPersonalOrLogin,
-      showLoginPage,
-      store
+      showLoginPage
     }
   }
 })

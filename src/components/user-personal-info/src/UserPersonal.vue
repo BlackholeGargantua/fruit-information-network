@@ -12,7 +12,7 @@
           <template v-for="history in historyRecords" :key="history.id">
             <a
               style="text-decoration: none"
-              :href="WEB_URL + '/info?fruitName=' + history.fruit_name"
+              :href="WEB_URL + '/fruit-info?fruitName=' + history.fruit_name"
             >
               <el-card shadow="hover">
                 <div class="card-content">
@@ -28,7 +28,7 @@
           <template v-for="favorite in favoriteRecords" :key="favorite.id">
             <a
               style="text-decoration: none"
-              :href="WEB_URL + '/info?fruitName=' + favorite.fruit_name"
+              :href="WEB_URL + '/fruit-info?fruitName=' + favorite.fruit_name"
             >
               <el-card shadow="hover">
                 <div class="card-content">

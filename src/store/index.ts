@@ -5,6 +5,7 @@ import { IRootState, IStoreType, IRequestQueryType } from './type'
 import login from './login'
 import user from './user-manage'
 import fruit from './fruit'
+import information from './information'
 
 const store = createStore<IRootState>({
   state: { fruitInfo: {}, banner: [] },
@@ -62,7 +63,7 @@ const store = createStore<IRootState>({
       })
     }
   },
-  modules: { fruit, login, user }
+  modules: { fruit, login, information, user }
 })
 
 // 自定义一个Store，为了更好兼容ts类型（类型有提示）
